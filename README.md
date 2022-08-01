@@ -10,7 +10,5 @@
 
 ## Final product
 
- ![AirBnB clone homepage](https://s3.amazonaws.com/alx-intranet.hbtn.io/uploads/medias/2020/9/fe2e3e7701dec72ce612472dab9bb55fe0e9f6d4.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDDGGGOUSBVO6H7D%2F20220801%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20220801T093738Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=67f8eea34fde7f16bd064a38074984325232c7f93fd11e6e87162a56c9ae2cea)
-
-
+ ![AirBnB clone homepage](homepage.png)
 
