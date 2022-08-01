@@ -12,3 +12,29 @@
 
  ![AirBnB clone homepage](illustrations/homepage.png)
 
+## The console
+
+ This is the first step towards building a full web application: the AirBnB clone.
+
+ ![Application design](illustrations/application_design.png)
+
+## Tasks :page_with_curl:
+
+- A parent class (`BaseModel`) will be put in place to take care of the initialization, serialization and deserialization of future instances.
+- Creation of a simple flow of serialization/deserialization: Instance <-> Dictionary <-> JSON string <-> file.
+- Creation of all classes used by AirBnB (`User`, `State`, `City`, `Place`...) that inherit from the `BaseModel`.
+- Creation of the first abstracted storage engine of the project: File storage.
+- Creation of all unittests to validate all classes and storage engine.
+
+### Aim of the console
+
+ On the whole, the console has a single use function: a command line interface (CLI) from which one can create, modify and delete objects in the file storage.
+ It will serve as a tool; a sandbox where one can play around with ideas, see what does and does not work in storage before building out the rest of the application.
+
+ For the purpose of this project, we want to be able to manage objects in the following way:
+
+1. Create a new object(ex: a new User or a new Place)
+2. Retrieve an object from a file, a database etc.
+3. Do operations on objects (count, compute stats, etc.)
+4. Update attributes of an object
+5. Destroy an object
