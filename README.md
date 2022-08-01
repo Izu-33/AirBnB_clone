@@ -10,5 +10,5 @@
 
 ## Final product
 
- ![AirBnB clone homepage](homepage.png)
+ ![AirBnB clone homepage](illustrations/homepage.png)
 
