@@ -92,3 +92,41 @@ class TestBaseModel_init(unittest.TestCase):
         base_model_1 = BaseModel()
         with self.assertRaises(TypeError):
             base_model_1.to_dict(None)
+
+
+class TestBaseModel_save(unittest.TestCase):
+    """Unittest for testing save method of the BaseModel class."""
+
+    def test_different_updated_at_after_save(self):
+        base_model_1 = BaseModel()
+        sleep(0.05)
+        prior_updated_at = base_model_1.updated_at
+        base_model_1.save()
+        self.assertLess(prior_updated_at, base_model_1.updated_at)
+
+    def test_save_with_None_arg(self):
+        base_model_1 = BaseModel()
+        with self.assertRaises(TypeError):
+            base_model_1.save(None)
+
+
+class TestBaseModel_to_dict(unittest.TestCase):
+    """Unittest for testing the to_dict BaseModel class method."""
+
+    def test_to_dict_type(self):
+        base_model_1 = BaseModel()
+        self.assertEqual(type(base_model_1.to_dict()), dict)
+
+    def test_to_dict_contains_correct_keys(self):
+        base_model_1 = BaseModel()
+        self.assertIn("id", base_model_1.to_dict())
+        self.assertIn("created_at", base_model_1.to_dict())
+        self.assertIn("updated_at", base_model_1.to_dict())
+        self.assertIn("__class__", base_model_1.to_dict())
+
+    def test_to_dict_contains_added_attributes(self):
+        base_model_1 = BaseModel()
+        base_model_1.name = "ALX"
+        base_model_1.number = 98
+        self.assertIn("name", base_model_1.to_dict())
+        self.assertIn("number", base_model_1.to_dict())
