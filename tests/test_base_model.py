@@ -130,3 +130,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
         base_model_1.number = 98
         self.assertIn("name", base_model_1.to_dict())
         self.assertIn("number", base_model_1.to_dict())
+
+
+if __name__ == "__main__":
+    unittest.main()
