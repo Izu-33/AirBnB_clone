@@ -68,10 +68,8 @@ class TestBaseModel_init(unittest.TestCase):
         base_model_1 = BaseModel(id="123456", created_at=dt_iso,
                                     updated_at=dt_iso)
         self.assertEqual(base_model_1.id, "123456")
-        self.assertEqual(dt,
-                         datetime.fromisoformat(base_model_1.created_at))
-        self.assertEqual(dt,
-                         datetime.fromisoformat(base_model_1.updated_at))
+        self.assertEqual(dt, base_model_1.created_at)
+        self.assertEqual(dt, base_model_1.updated_at)
 
     def test_init_with_None_kwargs(self):
         with self.assertRaises(TypeError):
