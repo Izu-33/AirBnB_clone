@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Defines the BaseModel class."""
+import models
 from uuid import uuid4
 from datetime import datetime
 
@@ -19,9 +20,12 @@ class BaseModel:
                                                          time_format)
                 else:
                     self.__dict__[k] = v
+        else:
+            models.storage.new(self)
 
     def save(self):
         self.updated_at = datetime.today()
+        models.storage.save()
 
     def to_dict(self):
         repr_dict = self.__dict__.copy()
