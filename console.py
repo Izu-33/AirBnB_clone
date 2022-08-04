@@ -12,7 +12,7 @@ from models import storage
 
 
 def analyze(arg):
-    return [i for i in arg.split()]
+    return [i[1:-1] if i.startswith('"') else i for i in arg.split()]
 
 
 class HBNBCommand(cmd.Cmd):
