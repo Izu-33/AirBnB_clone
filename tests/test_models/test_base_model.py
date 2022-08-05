@@ -81,7 +81,6 @@ class TestBaseModel_init(unittest.TestCase):
             BaseModel(id=None, created_at=None, updated_at=None)
 
 
-
 class TestBaseModel_save(unittest.TestCase):
     """Unittest for testing save method of the BaseModel class."""
 
@@ -103,7 +102,7 @@ class TestBaseModel_save(unittest.TestCase):
             os.rename("tmp", "file.json")
         except IOError:
             pass
-        
+
     def test_different_updated_at_after_save(self):
         base_model_1 = BaseModel()
         sleep(0.05)
