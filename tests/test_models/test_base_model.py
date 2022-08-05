@@ -6,6 +6,8 @@ Unittest classes:
     TestBaseModel_save
     TestBaseModel_to_dict
 """
+import os
+import models
 import unittest
 from datetime import datetime
 from models.base_model import BaseModel
@@ -17,6 +19,9 @@ class TestBaseModel_init(unittest.TestCase):
 
     def test_init_with_no_args(self):
         self.assertEqual(type(BaseModel()), BaseModel)
+
+    def test_new_instance_in_objects(self):
+        self.assertIn(BaseModel(), models.storage.all().values())
 
     def test_id_is_public_str(self):
         self.assertEqual(type(BaseModel().id), str)
@@ -75,26 +80,30 @@ class TestBaseModel_init(unittest.TestCase):
         with self.assertRaises(TypeError):
             BaseModel(id=None, created_at=None, updated_at=None)
 
-    def test_to_dict_datetime_attrs_are_str(self):
-        base_model_1 = BaseModel()
-        base_model_dict = base_model_1.to_dict()
-        self.assertEqual(type(base_model_dict["created_at"]), str)
-        self.assertEqual(type(base_model_dict["updated_at"]), str)
-
-    def test_contrast_to_dict_dunder_dict(self):
-        base_model_1 = BaseModel()
-        self.assertNotEqual(base_model_1.to_dict(),
-                            base_model_1.__dict__)
-
-    def test_to_dict_with_None_arg(self):
-        base_model_1 = BaseModel()
-        with self.assertRaises(TypeError):
-            base_model_1.to_dict(None)
 
 
 class TestBaseModel_save(unittest.TestCase):
     """Unittest for testing save method of the BaseModel class."""
 
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+        
     def test_different_updated_at_after_save(self):
         base_model_1 = BaseModel()
         sleep(0.05)
@@ -106,6 +115,13 @@ class TestBaseModel_save(unittest.TestCase):
         base_model_1 = BaseModel()
         with self.assertRaises(TypeError):
             base_model_1.save(None)
+
+    def test_save_updates_file(self):
+        base_model_1 = BaseModel()
+        base_model_1.save()
+        bm_id = "BaseModel." + base_model_1.id
+        with open("file.json", "r") as f:
+            self.assertIn(bm_id, f.read())
 
 
 class TestBaseModel_to_dict(unittest.TestCase):
@@ -128,6 +144,22 @@ class TestBaseModel_to_dict(unittest.TestCase):
         base_model_1.number = 98
         self.assertIn("name", base_model_1.to_dict())
         self.assertIn("number", base_model_1.to_dict())
+
+    def test_to_dict_datetime_attrs_are_str(self):
+        base_model_1 = BaseModel()
+        base_model_dict = base_model_1.to_dict()
+        self.assertEqual(type(base_model_dict["created_at"]), str)
+        self.assertEqual(type(base_model_dict["updated_at"]), str)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        base_model_1 = BaseModel()
+        self.assertNotEqual(base_model_1.to_dict(),
+                            base_model_1.__dict__)
+
+    def test_to_dict_with_None_arg(self):
+        base_model_1 = BaseModel()
+        with self.assertRaises(TypeError):
+            base_model_1.to_dict(None)
 
 
 if __name__ == "__main__":
