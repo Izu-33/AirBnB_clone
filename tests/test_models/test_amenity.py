@@ -73,3 +73,86 @@ class TestAmenity_init(unittest.TestCase):
     def test_init_with_None_kwargs(self):
         with self.assertRaises(TypeError):
             Amenity(id=None, created_at=None, updated_at=None)
+
+
+class TestAmenity_save(unittest.TestCase):
+    """Tests for save method of of Amenity class."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+
+    def test_different_updated_at_after_save(self):
+        amenity_1 = Amenity()
+        sleep(0.05)
+        prior_updated_at = amenity_1.updated_at
+        amenity_1.save()
+        self.assertLess(prior_updated_at, amenity_1.updated_at)
+
+    def test_save_with_None_arg(self):
+        amenity_1 = Amenity()
+        with self.assertRaises(TypeError):
+            amenity_1.save(None)
+
+    def test_save_updates_file_with_amenity(self):
+        amenity_1 = Amenity()
+        amenity_1.save()
+        amenity_1_id = "Amenity." + amenity_1.id
+        with open("file.json", "r") as f:
+            self.assertIn(amenity_1_id, f.read())
+
+
+class TestCase_to_dict(unittest.TestCase):
+    """Test of to_dict method of State class."""
+
+    def test_to_dict_type(self):
+        self.assertEqual(type(Amenity().to_dict()), dict)
+
+    def test_to_dict_contains_correct_keys(self):
+        amenity_1 = Amenity()
+        self.assertIn("id", amenity_1.to_dict())
+        self.assertIn("created_at", amenity_1.to_dict())
+        self.assertIn("updated_at", amenity_1.to_dict())
+        self.assertIn("__class__", amenity_1.to_dict())
+
+    def test_to_dict_contains_added_attrs(self):
+        amenity_1 = Amenity()
+        amenity_1.pet_name = "Danny"
+        amenity_1.phone = "123456"
+        self.assertEqual(amenity_1.pet_name, "Danny")
+        self.assertIn("phone", amenity_1.to_dict())
+
+    def test_to_dict_datetime_attrs_are_str(self):
+        amenity_1 = Amenity()
+        amenity_1_dict = amenity_1.to_dict()
+        self.assertEqual(type(amenity_1_dict["id"]), str)
+        self.assertEqual(type(amenity_1_dict["created_at"]), str)
+        self.assertEqual(type(amenity_1_dict["updated_at"]), str)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        amenity_1 = Amenity()
+        self.assertNotEqual(amenity_1.to_dict(), amenity_1.__dict__)
+
+    def test_to_dict_with_None_arg(self):
+        amenity_1 = Amenity()
+        with self.assertRaises(TypeError):
+            amenity_1.to_dict(None)
+
+
+if __name__ == "__main__":
+    unittest.main()
