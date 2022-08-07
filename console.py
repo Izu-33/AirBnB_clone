@@ -13,7 +13,22 @@ from models import storage
 
 
 def analyze(arg):
-    return [i[1:-1] if i.startswith('"') else i for i in arg.split()]
+    cb = re.search(r"\{(.*?)\}", arg)
+    sb = re.search(r"\[(.*?)\]", arg)
+    if cb is None:
+        if sb is None:
+            return [i.strip(",") for i in split(arg)]
+        else:
+            lex = split(arg[:sb.span()[0]])
+            ret = [i.strip(",") for i in lex]
+            ret.append(sb.group())
+            return ret
+    else:
+        lex = split(arg[:cb.span()[0]])
+        ret = [i.strip(",") for i in lex]
+        ret.append(cb.group())
+        return ret
+#    return [i[1:-1] if i.startswith('"') else i for i in arg.split()]
 
 
 class HBNBCommand(cmd.Cmd):
