@@ -123,3 +123,85 @@ class TestPlace_init(unittest.TestCase):
     def test_init_with_None_kwargs(self):
         with self.assertRaises(TypeError):
             Place(id=None, created_at=None, updated_at=None)
+
+
+class TestPlace_save(unittest.TestCase):
+    """Tests for save method of the class."""
+
+    @classmethod
+    def setUp(self):
+        try:
+            os.rename("file.json", "tmp")
+        except IOError:
+            pass
+
+    @classmethod
+    def tearDown(self):
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+
+    def test_different_updated_at_after_save(self):
+        place_1 = Place()
+        sleep(0.05)
+        prior_updated_at = place_1.updated_at
+        place_1.save()
+        self.assertLess(prior_updated_at, place_1.updated_at)
+
+    def test_save_wit_None_arg(self):
+        place_1 = Place()
+        with self.assertRaises(TypeError):
+            place_1.save(None)
+
+    def test_save_updates_file_with_place(self):
+        place_1 = Place()
+        place_1.save()
+        place_1_id = "Place." + place_1.id
+        with open("file.json", "r") as f:
+            self.assertIn(place_1_id, f.read())
+
+
+class TestPlace_to_dict(unittest.TestCase):
+    """Tests for to_dict method of the class."""
+
+    def test_to_dict_type(self):
+        self.assertEqual(type(Place().to_dict()), dict)
+
+    def test_to_dict_contains_correct_keys(self):
+        place_1 = Place()
+        self.assertIn("id", place_1.to_dict())
+        self.assertIn("created_at", place_1.to_dict())
+        self.assertIn("updated_at", place_1.to_dict())
+        self.assertIn("__class__", place_1.to_dict())
+
+    def test_to_dict_contains_added_attrs(self):
+        place_1 = Place()
+        place_1.pet_name = "Danny"
+        place_1.phone = 123456
+        self.assertEqual(place_1.pet_name, "Danny")
+        self.assertIn("phone", place_1.to_dict())
+
+    def test_to_dict_datetime_attrs_are_str(self):
+        place_1 = Place()
+        place_1_dict = place_1.to_dict()
+        self.assertEqual(type(place_1_dict["created_at"]), str)
+        self.assertEqual(type(place_1_dict["updated_at"]), str)
+
+    def test_contrast_to_dict_dunder_dict(self):
+        place_1 = Place()
+        self.assertNotEqual(place_1.to_dict(), place_1.__dict__)
+
+    def test_to_dict_with_None_arg(self):
+        place_1 = Place()
+        with self.assertRaises(TypeError):
+            place_1.to_dict(None)
+
+
+if __name__ == "__main__":
+    unittest.main()
