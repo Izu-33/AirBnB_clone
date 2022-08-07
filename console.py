@@ -101,8 +101,7 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
 
     def do_show(self, arg):
-        """Display the string representation of a class instance
-        of a given id.
+        """Display the string representation of a class instance of a given id.
         Usage: show <class> <id>
         """
         arg_list = analyze(arg)

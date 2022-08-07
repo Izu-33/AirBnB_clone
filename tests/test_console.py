@@ -50,7 +50,19 @@ class TestHBNBCommand_help(unittest.TestCase):
             self.assertEqual(text, f.getvalue().strip())
 
     def test_help_EOF(self):
-        test = "EOF signal to exit the program."
+        text = "EOF signal to exit the program."
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("help EOF"))
             self.assertEqual(text, f.getvalue().strip())
+
+
+class TestHBNBCommand_exit(unittest.TestCase):
+    """Tests for exiting the CLI."""
+
+    def test_quit_exit(self):
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.assertTrue(HBNBCommand().onecmd("quit"))
+
+    def test_EOF_exit(self):
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.assertTrue(HBNBCommand().onecmd("EOF"))
