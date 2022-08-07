@@ -59,9 +59,9 @@ class HBNBCommand(cmd.Cmd):
                 "update": self.do_update
                 }
         if match := re.search(r"\.", arg):
-            arg_list = [arg[:match.start()], arg[match.end():]]
+            arg_list = [arg[:match.span()[0]], arg[match.span()[1]:]]
             if match := re.search(r"((.*?)\)", arg_list[1]):
-                command = [argl[1][:match.start()], match.group()[1:-1]]
+                command = [arg_list[1][:match.span()[0]], match.group()[1:-1]]
                 if command[0] in arg_dict.keys():
                     call = "{} {}".format(arg_list[0], command[1])
                     return arg_dict[command[0]](call)
