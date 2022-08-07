@@ -4,7 +4,7 @@
 
 <h1 align="center">HBnB</h1>
 
-<h3 align="center">AN AirBnB clone</h3>
+<h3 align="center">An AirBnB clone</h3>
 
 
  The goal of the Air_BnB clone project is to deploy on a server a simple copy
