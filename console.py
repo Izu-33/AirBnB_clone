@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Define the console for the HBNB project."""
 import cmd
+import re
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -46,6 +47,26 @@ class HBNBCommand(cmd.Cmd):
         """EOF signal to exit the program."""
         print("")
         return True
+
+    def default(self, arg):
+        """Override default behaviour of cmd and allow for special
+        method calls."""
+        arg_dict = {
+                "all": self.do_all,
+                "show": self.do_show,
+                "destroy": self.do_destroy,
+                "count": self.do_count,
+                "update": self.do_update
+                }
+        if match := re.search(r"\.", arg):
+            arg_list = [arg[:match.start()], arg[match.end():]]
+            if match := re.search(r"((.*?)\)", arg_list[1]):
+                command = [argl[1][:match.start()], match.group()[1:-1]]
+                if command[0] in arg_dict.keys():
+                    call = "{} {}".format(arg_list[0], command[1])
+                    return arg_dict[command[0]](call)
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
     def do_create(self, arg):
         """Create a new class instance and prints its id.
@@ -97,6 +118,17 @@ class HBNBCommand(cmd.Cmd):
         else:
             del obj_dict["{}.{}".format(arg_list[0], arg_list[1])]
             storage.save()
+
+    def do_count(self, arg):
+        """Retrieves the number of instances of a class.
+        Usage: <class name>.count()
+        """
+        arg_list = analyze(arg)
+        count = 0
+        for obj in storage.all().values():
+            if arg_list[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
 
     def do_all(self, arg):
         """Display string representations of all instances of a given class.
