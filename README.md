@@ -1,5 +1,12 @@
 # AirBnB_clone
 
+ ![AirBnB project](illustrations/hbnb.png)
+
+<h1 align="center">HBnB</h1>
+
+<h3 align="center">AN AirBnB clone</h3>
+
+
  The goal of the Air_BnB clone project is to deploy on a server a simple copy
  of the [AirBnB website](https://alx-intranet.hbtn.io/rltoken/m8g02HcD2ovrl_K-zulYBw).
  By the end of this project timeline, the complete web application will be composed of:
